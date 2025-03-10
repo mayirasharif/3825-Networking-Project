@@ -31,13 +31,28 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels', #added for multiple clients
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'network_app' #added for connection to app
 ]
+#Needed for socket programming because WSGI is not developed enough 
+ASGI_APPLICATION = 'client_server_project.asgi.application'
+
+#Channel layers is used specifically for multiple clients
+CHANNEL_LAYERS = {
+    'default':{
+        'BACKEND':'channels.layers.InMemoryChannelLayer',
+        #This is where Port Number and IP Address go, however, InMemoryChannelLayer automatically configures
+        'CONFIG':{
+            
+        }
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

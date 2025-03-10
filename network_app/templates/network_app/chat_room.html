@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv = 'X-UA-Compatible' content = 'IE=edge'>
+        <title>ChatRoom</title>
+        <meta name = 'viewport' content = 'width=device-width, initial-scale=1'>
+    </head>
+
+    <body>
+        <h1>Message Here</h1>
+        <form id = 'submission'>
+            <input type = 'text', name = 'message'/>
+        </form>
+
+        <div id = 'text'> </div>
+
+        
+        <script type = 'text/javascript'> // Need to use JS for Socket sending and Receiving 
+
+            // The variable url helps to allocate the clients details into a set variable to use
+            let url = `ws://${window.location.host}/ws/socket-server/`
+            const Socket = new WebSocket(url) //This creates a Socket based on the User Details
+
+            //This function helps the client connect to the server and actually receive messages from other clients
+            Socket.onmessage = function(i){
+                let data= JSON.parse(i.data)
+                console.log('Data: ', data)
+
+                if (data.type === 'chat'){
+                    let text = document.getElementById('text')
+                    text.append(
+                        data.message)
+
+                }
+            }
+
+            
+            let submission = document.getElementById('submission')
+            //This event listener helps the client send a message to the server and subsequently the other client
+            submission.addEventListener('submit', (i)=> {
+                i.preventDefault()
+                let message = i.target.message.value 
+                Socket.send(JSON.stringify({
+                    'message':message
+                }))
+                submission.reset()
+            })
+
+
+        </script>
+    </body>
+</html>
+
