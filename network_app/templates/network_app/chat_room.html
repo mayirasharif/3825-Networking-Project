@@ -16,6 +16,9 @@
 
         <div id = 'text'> </div>
 
+        <div id = 'exit_text'> </div>
+
+        <button id = 'exit'>Exit</button>
         
         <script type = 'text/javascript'> // Need to use JS for Socket sending and Receiving 
 
@@ -32,7 +35,16 @@
                     let text = document.getElementById('text')
                     text.append(
                         data.message)
-
+                    text.append(document.createElement("br"))
+                }
+                else if (data.type === 'chat_message'){
+                    if (id !== myChannelName){
+                        let text = document.getElementById('text')
+                    text.append(
+                        data.message)
+                    text.append(document.createElement("br"))
+                
+                    }
                 }
             }
 
@@ -47,6 +59,15 @@
                 }))
                 submission.reset()
             })
+
+            let exit = document.getElementById('exit')
+
+            exit.addEventListener('click', function(event){
+                Socket.close(1000, 'Exited') //1000 means standard close code 
+                let text = document.getElementById('exit_text')
+                text.innerHTML = '<h1>You have exited the socket!</h1>'
+            })
+            
 
 
         </script>
